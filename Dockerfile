@@ -4,16 +4,17 @@ LABEL maintener="Ryosuke Goto <ryosuke.goto@gmail.com>"
 
 RUN apt-get update && \	
     apt-get install -y \
+      build-essential \
+      python-dev \
+      python3-dev \
       locales \
       libblas-dev \
       liblapack-dev \
       libatlas-base-dev \
-      libboost-all-dev \
-      gfortran \
-      nginx \
-      supervisor \
-      sqlite3 && \
-    pip3 install -U pip setuptools
+      autotools-dev \
+      libicu-dev \
+      libbz2-dev \
+      gfortran
 
 # install gcc and g++ so that liblpclassifier_cv32 can utilize the library
 RUN echo 'deb http://deb.debian.org/debian/ sid main' >> /etc/apt/sources.list
@@ -31,8 +32,13 @@ RUN sh cmake-3.8.2-Linux-x86_64.sh --skip-license
 # install boost with -fPIC
 RUN wget https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.gz
 RUN tar xvzf boost_1_64_0.tar.gz
-RUN cd boost_1_64_0 && ./bootstrap.sh && ./b2 cxxflags=-fPIC cflags=-fPIC -a install
-RUN rm -rf boost_1_64_0**
+WORKDIR boost_1_64_0/
+RUN ./bootstrap.sh --prefix=/usr/local
+RUN ./b2 -j $(nproc) cxxflags=-fPIC install; exit 0
+WORKDIR /
+RUN rm -rf /boost_1_64_0**
+RUN echo "/usr/local/lib" >> /etc/ld.so.conf.d/local.conf
+RUN ldconfig
 
 # set the locale to en_US.UTF-8 to perform migrations successfully
 ENV DEBIAN_FRONTEND noninteractive
