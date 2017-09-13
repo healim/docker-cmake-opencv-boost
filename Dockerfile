@@ -47,3 +47,27 @@ RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     dpkg-reconfigure locales && \
     /usr/sbin/update-locale LANG=en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
+
+# For web development : nodejs, mssql-tools and uwsgi
+
+# install additional dependencies
+
+RUN apt-get update && \	
+    apt-get install -y \
+      apt-transport-https \
+      nginx \
+      supervisor \
+      sqlite3 && \
+    pip3 install -U pip setuptools
+
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
+RUN apt-get install -y nodejs
+
+# install odbc to connect Azure SQL
+RUN curl -sL https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+RUN curl -sL https://packages.microsoft.com/config/ubuntu/16.04/prod.list > /etc/apt/sources.list.d/mssql.list
+RUN apt-get update -y
+RUN ACCEPT_EULA=Y apt-get install -y msodbcsql mssql-tools unixodbc-dev
+
+# install uwsgi now because it takes a little while
+RUN pip3 install uwsgi
