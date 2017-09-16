@@ -42,7 +42,6 @@ ENV LC_ALL en_US.UTF-8
 
 # clean up
 WORKDIR /
-RUN rm -rf /var/lib/apt/lists/*
 RUN rm cmake-3.9.2-Linux-x86_64.sh
 RUN rm -rf /boost_1_64_0**
 RUN rm -rf /var/lib/apt/lists/*
