@@ -15,12 +15,7 @@ RUN apt-get update && \
       libbz2-dev \
       gfortran
 
-RUN echo 'deb http://deb.debian.org/debian/ sid main' >> /etc/apt/sources.list
-RUN apt-get update -y && \
-    apt-get install -y \
-      gcc-5 \
-      g++-5 && \
-    rm -rf /var/lib/apt/lists/*
+RUN rm -rf /var/lib/apt/lists/*
 
 # install cmake
 RUN apt-get remove -y cmake
