@@ -15,8 +15,6 @@ RUN apt-get update && \
       libbz2-dev \
       gfortran
 
-RUN rm -rf /var/lib/apt/lists/*
-
 # install cmake
 RUN apt-get remove -y cmake
 RUN wget https://cmake.org/files/v3.9/cmake-3.9.2-Linux-x86_64.sh
@@ -44,6 +42,7 @@ ENV LC_ALL en_US.UTF-8
 
 # clean up
 WORKDIR /
+RUN rm -rf /var/lib/apt/lists/*
 RUN rm cmake-3.9.2-Linux-x86_64.sh
 RUN rm -rf /boost_1_64_0**
 RUN rm -rf /var/lib/apt/lists/*
