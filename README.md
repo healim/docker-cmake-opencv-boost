@@ -2,25 +2,37 @@
 
 This docker image was built with CMake, Boost C++ Library and OpenCV 3.2.0 installed onto the official python:3.5.3 docker image.
 
-
 ## Usage in Dockerfile
 
 With your own Dockerfile
-```
-from pathtrk/cmake-opencv-boost
-```
 
+```dockerfile
+FROM pathtrk/cmake-opencv-boost
+```
 
 ## Using Boost and OpenCV
 
 Your C++ code can find them with instructions in CMakeList.txt as below 
 
-```
+```cmake
 find_package(OpenCV 3.2 REQUIRED)
 ```
 
 OR
 
-```
+```cmake
 find_package(Boost COMPONENTS filesystem system program_options REQUIRED)
 ```
+
+## Test run with this Dockerfile
+
+The test C++ file can be compiled like following,
+
+```bash
+$ docker buiild -t boost-opencv .
+$ docker docker run -it --name boost-opencv -v `pwd`:/home/docker/code boost-opencv /bin/bash
+$ g++ test_boost_numpy.cc -I /usr/local/include/python3.5m \
+    -lboost_python3 -lboost_numpy3 -lpython3.5m
+```
+
+It just works, but the compiled binary does nothing by default.
